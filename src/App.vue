@@ -1,32 +1,28 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div>
+    <input type="text" v-model="postcode" />
+    <button @click="getAddress">住所自動入力</button>
+    <p>住所: {{ address }}</p>
   </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+<script>
+import axios from "axios";
+export default {
+  data() {
+    return {
+      postcode: "",
+      address: "",
+    };
+  },
+  methods: {
+    async getAddress() {
+      const test = await axios.get(
+        `https://apis.postcode-jp.com/api/v3/postcodes/${this.postcode}?apikey=UfA7WbUAo40UEi071uGMRp6Dm2i3CXIrUejNrqI`
+      );
+      console.log(test.data["allAddress"]);
+      this.address = test.data["allAddress"];
+    },
+  },
+};
+</script>
